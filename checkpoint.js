@@ -33,7 +33,9 @@ const {
 // < 16
 
 function exponencial(exp) {
-
+    return function(num) {
+        return Math.pow(num, exp)
+    }
 }
 
 // ----- Recursión -----
@@ -70,7 +72,51 @@ function exponencial(exp) {
 // Aclaraciones: el segundo parametro que recibe la funcion ('direccion') puede ser pasado vacio (null)
 
 function direcciones(laberinto) {
+    if(typeof(laberinto) !== 'object'){
+        return ''
+    }
+    var direccion = '';
 
+    if((laberinto.N === 'pared') && (laberinto.S === 'pared') && (laberinto.E === 'pared') && (laberinto.O === 'pared')){
+        return direccion.slice(0, -1)
+    }
+    if(laberinto.N){
+        if(laberinto.N === 'destino'){
+            return 'N';
+        }
+        if(typeof(laberinto.N) === 'object'){
+            direccion + 'N';
+            direccion + direcciones(laberinto.N)
+        }
+    };
+    if(laberinto.S){
+        if(laberinto.S === 'destino'){
+           return  'S';
+        }
+        if(typeof(laberinto.S) === 'object'){
+            direccion + 'S';
+            direccion + direcciones(laberinto.S)
+        }
+    };
+    if(laberinto.E){
+        if(laberinto.E === 'destino'){
+            return direccion + 'E';
+        }
+        if(typeof(laberinto.E) === 'object'){
+            direccion + 'E';
+            direccion + direcciones(laberinto.E)
+        }
+    };
+    if(laberinto.O){
+        if(laberinto.O === 'destino'){
+            return 'O';
+        }
+        if(typeof(laberinto.O) === 'object'){
+            direccion + 'O';
+            direccion + direcciones(laberinto.O)
+        }
+    };
+    return direccion
 }
 
 
@@ -88,7 +134,28 @@ function direcciones(laberinto) {
 // deepEqualArrays([0,1,[[0,1,2],1,2]], [0,1,[[0,1,2],1,2]]) => true
 
 function deepEqualArrays(arr1, arr2) {
-
+    if(arr1.length !== arr2.length){
+        return false
+    };
+    var arr1Index = 0;
+    var arr2Index = 0;
+    while(arr1Index < arr1.length && arr2Index < arr2.length){
+        if(Array.isArray(arr1[arr1Index]) && Array.isArray(arr2[arr2Index])) {
+            if(!(deepEqualArrays(arr1[arr1Index], arr2[arr2Index]))){
+                return false
+            } else{
+                arr1Index++;
+                arr2Index++;
+            }
+        };
+        if(arr1[arr1Index] === arr2[arr2Index]){
+            arr1Index++;
+            arr2Index++;
+        }else{
+            return false
+        }
+    }
+    return true
 }
 
 
